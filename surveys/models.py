@@ -15,12 +15,17 @@ class Poll(models.Model):
 
 class Question(models.Model):
 
-	poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='questions')
-	questiontype = models.CharField(max_length=200, blank=False, null=False, verbose_name="Название опроса")
+	QUESTION_TYPES = (('T', 'ответ текстом'),
+			          ('S', 'ответ с выбором одного варианта'),
+			          ('M', 'ответ с выбором нескольких вариантов'))
+
+	poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='questions')	
+	questiontype = models.CharField(max_length=3, choices=QUESTION_TYPES, blank=False, null=False, verbose_name="Название опроса")
 
 
 class Answer(models.Model):
 
 	question = models.ForeignKey(Question, on_delete=models.CASCADE)
+
 
 
