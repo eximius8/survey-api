@@ -6,7 +6,7 @@ class Poll(models.Model):
 
 	name = models.CharField(max_length=200, blank=False, null=False, verbose_name="Название опроса")
 	description = models.TextField(verbose_name="Описание опроса", blank=True, null=True)
-	start_date = models.DateField(auto_now=True, auto_now_add=False, editable=False)
+	start_date = models.DateField(auto_now=True, editable=False)
 	end_date = models.DateField(editable=True)
 
 	def __str__(self):
@@ -20,12 +20,16 @@ class Question(models.Model):
 			          ('M', 'ответ с выбором нескольких вариантов'))
 
 	poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='questions')	
-	questiontype = models.CharField(max_length=3, choices=QUESTION_TYPES, blank=False, null=False, verbose_name="Название опроса")
+	questiontext = models.CharField(max_length=300, blank=False, null=False, 
+		verbose_name="Текст вопроса")
+	questiontype = models.CharField(max_length=3, choices=QUESTION_TYPES, blank=False, null=False, 
+		verbose_name="Название опроса")
 
 
 class Answer(models.Model):
 
-	question = models.ForeignKey(Question, on_delete=models.CASCADE)
+	question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="answers")
+	option = models.CharField(max_length=200, blank=False, null=False, verbose_name="Вариант ответа")
 
 
 
