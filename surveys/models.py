@@ -38,3 +38,9 @@ class Survey(models.Model):
 
     def __str__(self):
         return self.name
+
+
+
+class UserResponse(models.Model):
+	"""Ответ пользователя"""
+	pass
