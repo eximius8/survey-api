@@ -19,3 +19,10 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+
+# cleaning migrations
+
+# find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+# find . -path "*/migrations/*.pyc"  -delete
