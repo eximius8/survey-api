@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 
 
@@ -32,4 +33,8 @@ class Answer(models.Model):
 	option = models.CharField(max_length=200, blank=False, null=False, verbose_name="Вариант ответа")
 
 
+class UserResponse(models.Model):
 
+	answer = models.OneToOneField(Answer, blank=True, null=True, on_delete=models.CASCADE)
+	textresponse = models.TextField(verbose_name="Ответ в виде текста", blank=True, null=True)
+	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
