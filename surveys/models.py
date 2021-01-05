@@ -1,8 +1,10 @@
+from datetime import date
+
 from django.db import models
 
 from wagtail.core.fields import StreamField
-from wagtail.wagtailsnippets.models import register_snippet
-from wagtail.wagtailadmin.edit_handlers import StreamFieldPanel
+from wagtail.snippets.models import register_snippet
+from wagtail.admin.edit_handlers import StreamFieldPanel
 
 
 from .blocks import QuestionTextBlock, QuestionMultipleChoiceBlock, QuestionSingleChoicBlock
