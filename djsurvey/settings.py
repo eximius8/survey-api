@@ -47,6 +47,9 @@ INSTALLED_APPS = [
     'wagtail.search',
     'wagtail.admin',
     'wagtail.core',
+    'wagtail.api.v2',
+
+    'rest_framework',
     
     'taggit',
     'modelcluster',
@@ -143,3 +146,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+WAGTAIL_SITE_NAME = "Django survey"

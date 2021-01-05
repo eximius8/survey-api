@@ -4,7 +4,7 @@ from django.db import models
 
 from wagtail.core.fields import StreamField
 from wagtail.snippets.models import register_snippet
-from wagtail.admin.edit_handlers import StreamFieldPanel
+from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel
 
 
 from .blocks import QuestionTextBlock, QuestionMultipleChoiceBlock, QuestionSingleChoicBlock
@@ -26,7 +26,10 @@ class Survey(models.Model):
         ('multiplechoicequestion', QuestionMultipleChoiceBlock()),
     ])
 
-    panels = [StreamFieldPanel('questions')]
+    panels = [FieldPanel('name'),
+			  FieldPanel('description'),
+			  StreamFieldPanel('questions')
+	]
 
     class Meta:
         verbose_name = 'Опрос'
