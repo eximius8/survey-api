@@ -49,6 +49,21 @@ curl --header "Content-Type: application/json" --request POST\
 
 ## Работа администратора
 
+ Управление API происходит по адресам:
+ * /api/surveys/ - опросы
+ * /api/questions/ - вопросы
+ * /api/answers/ - варианты ответов
+API доступные для всех моделей:
+#### Чтение
+
+```
+curl http://127.0.0.1:8000/api/answers/
+```
+#### Удаление
+```
+curl -X DELETE http://127.0.0.1:8000/api/answers/13/
+```
+
 ### Работа с опросами
 Создание опроса c тремя вопросами (пользователь администратор): 
 1. Требующий текстового ответа "questiontype": "T"
@@ -216,10 +231,6 @@ curl -X PUT  http://127.0.0.1:8000/api/questions/19/ \
 curl -X PUT http://127.0.0.1:8000/api/answers/3/\
  --header "Content-Type: application/json"\
  --data '{"option":"Измененный вариант ответа"}'
-```
-Удаление
-```
-curl -X DELETE http://127.0.0.1:8000/api/answers/13/
 ```
 
 ## Работа пользователя

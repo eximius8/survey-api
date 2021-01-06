@@ -27,7 +27,7 @@ DB_PASSWORD = os.environ.get('DB_PASSWORD', 'postgres')
 DB_HOST = os.environ.get('DB_HOST', 'db')
 DB_PORT = os.environ.get('DB_PORT', 5432)
 # Проверка работает ли приложение - в докере 
-DOCKER_ENV = os.environ.get('DB_PORT', False)
+DOCKER_ENV = os.environ.get('DOCKER_ENV', False)
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
