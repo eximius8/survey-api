@@ -90,6 +90,7 @@ class PollDetailSerializer(serializers.ModelSerializer):
 
 	questions = QuestionInternalSerializer(many=True, required=False)
 
+
 	def create(self, validated_data):
 
 		poll = Poll.objects.create(name=validated_data['name'],

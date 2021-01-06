@@ -5,6 +5,7 @@ WORKDIR /code
 
 # set environment variables
 ENV SECRET_KEY 4lv5*mmca23wyeics&^%j71h!qy@43&c(wsd@fj+_0mp#x-8y-
+ENV DOCKER_ENV True
 
 
 # install dependencies
