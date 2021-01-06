@@ -20,7 +20,9 @@ from rest_framework.routers import DefaultRouter
 import surveys.views as survey_views
 
 router = DefaultRouter()
-router.register(r'surveys', survey_views.AccountViewSet)
+router.register(r'surveys', survey_views.PollViewSet)
+router.register(r'questions', survey_views.QuestionViewSet)
+
 
 
 
