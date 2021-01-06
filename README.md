@@ -52,7 +52,8 @@ curl --header "Content-Type: application/json" --request POST\
  Управление API происходит по адресам:
  * /api/surveys/ - опросы
  * /api/questions/ - вопросы
- * /api/answers/ - варианты ответов
+ * /api/answers/ - варианты ответов  
+
 API доступные для всех моделей:
 #### Чтение
 
