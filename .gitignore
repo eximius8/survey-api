@@ -136,3 +136,9 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+
+# temporary not include migratiuons
+
+*/migrations/*.py
+*/migrations/*.pyc
