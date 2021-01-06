@@ -14,6 +14,7 @@ router.register(r'answers', survey_views.AnswerViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/', include('rest_registration.api.urls')),
     path('api-auth/', include('rest_framework.urls')),
     path('api/', include(router.urls))
 ]

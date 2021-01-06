@@ -9,7 +9,7 @@ API для создания прохождения опросов. Опросы 
 ## Установка
 Создаем базу (postgres) и веб сервисы
 ```
-docker-compose build
+sudo docker-compose build
 ```
 Готовим базу данных:
 ```
@@ -18,25 +18,114 @@ sudo docker-compose run web python manage.py createsuperuser
 ```
 Запускаем приложение
 ```
-docker-compose up
+sudo docker-compose up
 ```
 Смотрим log:
 ```
 docker-compose logs -f web
 ```
+## Начало работы
 
-## Создание опросов
-
-Опрос без вопросов 
+### Регистрация
 ```
 curl --header "Content-Type: application/json" --request POST\
- --data '{"name":"Опрос 1","description": "Описание опроса 1", "end_date": null, "questions": []}'\
- http://127.0.0.1:8000/api/surveys/
+ --data '{"login":"api-user","password":"testing321"}'\
+ http://127.0.0.1:8000/accounts/login/
+ ```
+Ответ
+```
+{"id":2,"username":"api-user","first_name":"","last_name":"","email":""}
+```
+### Вход 
+```
+curl --header "Content-Type: application/json" --request POST\
+ --data '{"login":"api-user","password":"testing321"}'\
+ http://127.0.0.1:8000/accounts/login/
+```
+Ответ
+```
+{"detail":"Login successful","token":"ced7d2f8c0720fd2ca4f44638e22ad57b5344202"}
 ```
 
-## Работа с вариантами ответов
+## Работа администратора
 
-### Изменение ответа
+### Работа с опросами
+Создание опроса c тремя вопросами (пользователь администратор): 
+1. Требующий текстового ответа "questiontype": "T"
+1. С ответом множественного выбора "questiontype": "M"
+1. С ответом единичного выбора "questiontype": "S"
+```
+curl -X POST  http://127.0.0.1:8000/api/surveys/\
+ -H 'Authorization: Token ced7d2f8c0720fd2ca4f44638e22ad57b5344202'\
+ --header "Content-Type: application/json"\
+ --data '{"name":"Опрос 1","description": "Описание опроса 1", "end_date": null, 
+  "questions": [
+    { 
+        "questiontext": "Как вы провели лето?", 
+        "questiontype": "T", 
+        "answers": [] 
+    },
+    { 
+        "questiontext": "Какие ваши любимые фильмы?", 
+        "questiontype": "M", 
+        "answers": [
+            {"option": "Иван Васильевич меняет профессию" },
+            {"option": "Матрица" },
+            {"option": "Шматрица" },
+            {"option": "Санта Барбара" }
+        ] 
+    },
+    { 
+        "questiontext": "Какой фильм из списка является сериалом?", 
+        "questiontype": "S", 
+        "answers": [
+            {"option": "Иван Васильевич меняет профессию" },
+            {"option": "Матрица" },
+            {"option": "Шматрица" },
+            {"option": "Санта Барбара" }
+        ] 
+    }]}'
+```
+Ответ
+```
+{"id":21,
+"name":"Опрос 1",
+"description":"Описание опроса 1",
+"start_date":"2021-01-06",
+"end_date":null,
+"questions":[
+    {"id":16,
+    "questiontext":"Как вы провели лето?",
+    "questiontype":"T",
+    "answers":[]},
+    {"id":17,
+    "questiontext":"Какие ваши любимые фильмы?",
+    "questiontype":"M",
+    "answers":[
+        {
+            "id":31,"option":"Иван Васильевич меняет профессию"
+            },
+        {
+            "id":32,"option":"Матрица"
+        },
+        {
+            "id":33,"option":"Шматрица"
+        },
+        {"id":34,"option":"Санта Барбара"}
+        ]},
+    {"id":18,
+    "questiontext":"Какой фильм из списка является сериалом?",
+    "questiontype":"S",
+    "answers":[{"id":35,"option":"Иван Васильевич меняет профессию"},{"id":36,"option":"Матрица"},{"id":37,"option":"Шматрица"},{"id":38,"option":"Санта Барбара"}]}]}
+```
+В случае, если пользователь не администратор
+```
+{"detail":"У вас недостаточно прав для выполнения данного действия."}
+```
+
+### Работа с вариантами ответов
+
+#### Изменение ответа
 
 ```
 curl -X PUT http://127.0.0.1:8000/api/answers/3/\
@@ -44,7 +133,7 @@ curl -X PUT http://127.0.0.1:8000/api/answers/3/\
  --data '{"option":"Измененный вариант ответа"}'
 ```
 
-### Удаление ответа
+#### Удаление ответа
 
 ```
 curl -X DELETE http://127.0.0.1:8000/api/answers/13/
