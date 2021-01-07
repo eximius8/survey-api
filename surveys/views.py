@@ -3,8 +3,18 @@ from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAdminUser, SAFE_METHODS, BasePermission
 
 from .models import Poll, Question, Answer, UserResponse
-from .serializers import PollDetailSerializer, QuestionSerializer, AnswerSerializer
+from .serializers import PollDetailSerializer, QuestionSerializer, AnswerSerializer, UserResponseSerializer
 
+
+class UserResponseViewSet(viewsets.ModelViewSet):
+    """
+    Вью для ответов пользователей доступно всем
+    """
+    queryset = UserResponse.objects.all()
+    serializer_class = UserResponseSerializer
+
+    filterset_fields = ['userid']
+    
 
 class ReadOnly(BasePermission):
     def has_permission(self, request, view):
@@ -13,16 +23,20 @@ class ReadOnly(BasePermission):
 
 class PollViewSet(viewsets.ModelViewSet):
     """
-    A simple ViewSet for viewing and editing accounts.
+    Вью для опросов доступно администраторам
     """
+    
     queryset = Poll.objects.all()
     serializer_class = PollDetailSerializer
     permission_classes = [IsAdminUser|ReadOnly]
+   
+    
+    filterset_fields ={'end_date': ['gte', 'lte', 'exact', 'gt', 'lt'], }
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
     """
-    A simple ViewSet for viewing and editing accounts.
+    Вью для вопросов доступно администраторам
     """
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
@@ -34,7 +48,7 @@ class AnswerViewSet(mixins.RetrieveModelMixin,
                    mixins.ListModelMixin,
                    viewsets.GenericViewSet):
     """
-    A simple ViewSet for viewing and editing accounts.
+    Вью для ответов доступно администраторам
     """
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer

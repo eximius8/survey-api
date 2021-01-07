@@ -9,6 +9,7 @@ router = DefaultRouter()
 router.register(r'surveys', survey_views.PollViewSet)
 router.register(r'questions', survey_views.QuestionViewSet) 
 router.register(r'answers', survey_views.AnswerViewSet)
+router.register(r'responses', survey_views.UserResponseViewSet)
 
 
 

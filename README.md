@@ -44,7 +44,7 @@ curl --header "Content-Type: application/json" --request POST\
 ```
 Ответ
 ```
-{"detail":"Login successful","token":"ced7d2f8c0720fd2ca4f44638e22ad57b5344202"}
+{"detail":"Login successful","token":"554b5ad26bed024698a218e6a0042b004e5c6e39"}
 ```
 
 ## Работа администратора
@@ -62,7 +62,7 @@ curl http://127.0.0.1:8000/api/answers/
 ```
 #### Удаление
 ```
-curl -X DELETE http://127.0.0.1:8000/api/answers/13/
+curl -X DELETE http://127.0.0.1:8000/api/answers/15/
 ```
 
 ### Работа с опросами
@@ -72,12 +72,12 @@ curl -X DELETE http://127.0.0.1:8000/api/answers/13/
 1. С ответом единичного выбора "questiontype": "S"
 ```
 curl -X POST  http://127.0.0.1:8000/api/surveys/\
- -H 'Authorization: Token ced7d2f8c0720fd2ca4f44638e22ad57b5344202'\
+ -H 'Authorization: Token 554b5ad26bed024698a218e6a0042b004e5c6e39'\
  --header "Content-Type: application/json"\
- --data '{"name":"Опрос 1","description": "Описание опроса 1", "end_date": null, 
+ --data '{"name":"Фильмы","description": "Опрос посвящен фильмам", "end_date": null, 
   "questions": [
     { 
-        "questiontext": "Как вы провели лето?", 
+        "questiontext": "Что вы цените в кино?", 
         "questiontype": "T", 
         "answers": [] 
     },
@@ -236,9 +236,31 @@ curl -X PUT http://127.0.0.1:8000/api/answers/3/\
 
 ## Работа пользователя
 
+### Активные опросы
+```
+curl http://127.0.0.1:8000/api/surveys/?end_date__gte=<Сегодняшняя дата в формате ГГГГ-ММ-ДД>
+```
+### Список отвеченных вопросов
+```
+curl http://127.0.0.1:8000/api/responses/?userid=<ID>
+```
+### Отправить ответ
+userid - иденнтификатор пользователя. В зависимости от типа вопроса можно отправить либо список воззможных ответов либо текстовый ответ. 
+```
+curl -X POST  http://127.0.0.1:8000/api/responses/\ 
+ --header "Content-Type: application/json"\
+ --data '{ 
+        "question": 1,
+        "userid": 2,
+        "textresponse": "Текстовый ответ",
+        "answers": [],
+    }'
+```
+
 # Что не успел
 
+1. На вопросы где нужно выбирать можно предоставить ID ответов, которые к ним не привязаны.
 1. Тесты
-1. Не написал метод update для сериалайзера опросов
+1. Метод update для сериалайзера опросов не обновляет вопросы и варианты ответов
 1. Авторизация слишком простая через django-rest-registration без jwt и oauth
 1. Возможно, более удобным было бы использование StreamField для модели вопроса

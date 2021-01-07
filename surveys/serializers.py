@@ -1,9 +1,44 @@
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
-from .models import Poll, Question, Answer
+from .models import Poll, Question, Answer, UserResponse
+
+class UserResponseSerializer(serializers.ModelSerializer):
+	"""
+	Сериалайзер для ответов пользователей
+	"""
+
+	id = serializers.IntegerField(required=False)
+
+	def validate(self, attrs):
+
+		quest = attrs['question']
+		if quest.questiontype == "T" and len(attrs['answers']) > 0:
+			raise serializers.ValidationError("Для текстового ответа указывать варианты ответа не нужно")
+		if quest.questiontype == "S" and len(attrs['answers']) != 1:
+			raise serializers.ValidationError("Необходимо выбрать один вариант ответа")
+		if quest.questiontype in ["S", "M"] and len(attrs['textresponse']) > 0:
+			raise serializers.ValidationError("Для вопроса нужно выбрать вариант(ы) ответа а не текст")
+		
+		return attrs
+
+
+	class Meta:
+		model = UserResponse
+		fields = ['id', 'question', 'answers', 'textresponse', 'userid']
+		validators = [
+            UniqueTogetherValidator(
+                queryset=UserResponse.objects.all(),
+                fields=['question', 'userid']
+            )
+        ]
+
 
 
 class AnswerSerializer(serializers.ModelSerializer):
+	"""
+	Сериалайзер для возможных ответов на вопросы
+	"""
 
 	id = serializers.IntegerField(required=False)
 
@@ -14,6 +49,9 @@ class AnswerSerializer(serializers.ModelSerializer):
 
 
 class QuestionSerializer(serializers.ModelSerializer):
+	"""
+	Сериалайзер для изменения вопросов
+	"""
 
 	answers = AnswerSerializer(many=True, required=False)
 
@@ -48,7 +86,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 		
 		submitted_answer_ids = []	
 		
-		# updating bound answers
+		# updating answers
 		for answer in submited_answers:
 			answer_id = answer.get('id', None)
 			submitted_answer_ids += [answer_id,]
@@ -62,7 +100,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 			else:
 				new_answer = Answer.objects.create(question=instance, **answer)
 				submitted_answer_ids += [new_answer.pk,]
-
+		
 		for answer in instance.answers.all():
 			if not answer.pk in submitted_answer_ids:
 				answer.delete()		
@@ -77,6 +115,9 @@ class QuestionSerializer(serializers.ModelSerializer):
 		
 
 class QuestionInternalSerializer(serializers.ModelSerializer):
+	"""
+	Сериалайзер для получения списка вопросов
+	"""
 
 	id = serializers.IntegerField(required=False)
 	answers = AnswerSerializer(many=True, required=False)
@@ -87,6 +128,9 @@ class QuestionInternalSerializer(serializers.ModelSerializer):
 
 
 class PollDetailSerializer(serializers.ModelSerializer):
+	"""
+	Сериалайзер для опросов
+	"""	
 
 	questions = QuestionInternalSerializer(many=True, required=False)
 
@@ -128,5 +172,4 @@ class PollDetailSerializer(serializers.ModelSerializer):
 		model = Poll
 		fields = ['id', 'name', 'description', 'start_date', 'end_date', 'questions']
 		read_only_fields = ['id',]
-
 
