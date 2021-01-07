@@ -138,7 +138,3 @@ dmypy.json
 cython_debug/
 
 
-# temporary not include migratiuons
-
-*/migrations/*.py
-*/migrations/*.pyc
